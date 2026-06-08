@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oddsbetting — Bet smarter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #3B6D11;
+      --green-light: #EAF3DE;
+      --green-mid: #639922;
+      --amber: #854F0B;
+      --amber-light: #FAEEDA;
+      --red: #A32D2D;
+      --red-light: #FCEBEB;
+      --text: #1a1a18;
+      --text-muted: #6b6b65;
+      --text-faint: #a0a09a;
+      --bg: #f7f6f1;
+      --surface: #ffffff;
+      --border: rgba(0,0,0,0.1);
+      --border-strong: rgba(0,0,0,0.18);
+      --radius: 10px;
+      --radius-lg: 14px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* NAV */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 32px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo {
+      font-size: 19px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      letter-spacing: -0.3px;
+    }
+    .logo-dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: var(--green-mid);
+    }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-link { font-size: 14px; color: var(--text-muted); cursor: pointer; transition: color 0.15s; }
+    .nav-link:hover { color: var(--text); }
+    .nav-cta {
+      font-size: 13px; font-weight: 500;
+      background: var(--green-mid); color: #fff;
+      padding: 8px 18px; border-radius: var(--radius);
+      border: none; cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .nav-cta:hover { opacity: 0.88; }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 64px 24px 48px;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 12px; font-weight: 500;
+      color: var(--green); background: var(--green-light);
+      padding: 5px 14px; border-radius: 20px;
+      margin-bottom: 20px;
+      letter-spacing: 0.02em;
+    }
+    .live-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green-mid);
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
+    .hero h1 {
+      font-size: 42px; font-weight: 500; line-height: 1.15;
+      letter-spacing: -0.8px; margin-bottom: 16px;
+    }
+    .hero p {
+      font-size: 17px; color: var(--text-muted);
+      line-height: 1.65; margin-bottom: 28px;
+    }
+    .hero-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--green-mid); color: #fff;
+      border: none; padding: 12px 24px;
+      border-radius: var(--radius); font-size: 15px;
+      font-weight: 500; cursor: pointer; font-family: inherit;
+      transition: opacity 0.15s;
+    }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-secondary {
+      background: var(--surface); color: var(--text);
+      border: 1px solid var(--border-strong);
+      padding: 12px 24px; border-radius: var(--radius);
+      font-size: 15px; cursor: pointer; font-family: inherit;
+      transition: background 0.15s;
+    }
+    .btn-secondary:hover { background: var(--bg); }
+
+    /* MAIN LAYOUT */
+    .container { max-width: 860px; margin: 0 auto; padding: 0 24px 64px; }
+
+    /* STATS ROW */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px; margin-bottom: 28px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+    }
+    .stat-val { font-size: 22px; font-weight: 500; letter-spacing: -0.3px; }
+    .stat-label { font-size: 12px; color: var(--text-faint); margin-top: 3px; }
+
+    /* SPORT NAV */
+    .sport-nav { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .sport-btn {
+      font-size: 13px; font-weight: 500;
+      padding: 7px 18px; border-radius: 20px;
+      border: 1px solid var(--border-strong);
+      background: var(--surface); color: var(--text-muted);
+      cursor: pointer; font-family: inherit;
+      transition: all 0.15s;
+    }
+    .sport-btn:hover { color: var(--text); }
+    .sport-btn.active {
+      background: var(--green-mid); color: #fff;
+      border-color: var(--green-mid);
+    }
+
+    /* SECTION LABEL */
+    .section-label {
+      font-size: 11px; font-weight: 500;
+      color: var(--text-faint); letter-spacing: 0.08em;
+      text-transform: uppercase; margin-bottom: 12px;
+    }
+
+    /* GAME CARDS */
+    .game-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px 18px;
+      margin-bottom: 10px;
+      transition: border-color 0.15s;
+    }
+    .game-card:hover { border-color: var(--border-strong); }
+    .game-top {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 12px;
+    }
+    .game-time { font-size: 12px; color: var(--text-faint); font-family: 'DM Mono', monospace; }
+    .game-book {
+      font-size: 11px; color: var(--text-faint);
+      background: var(--bg); padding: 3px 9px;
+      border-radius: 8px;
+    }
+    .matchup {
+      display: flex; justify-content: space-between;
+      align-items: center; gap: 12px; margin-bottom: 14px;
+    }
+    .team-block { flex: 1; }
+    .team-block.right { text-align: right; }
+    .team-name { font-size: 15px; font-weight: 500; }
+    .team-ml { font-size: 12px; color: var(--text-muted); margin-top: 2px; font-family: 'DM Mono', monospace; }
+    .vs-badge {
+      font-size: 11px; color: var(--text-faint);
+      background: var(--bg); padding: 4px 10px;
+      border-radius: 8px; white-space: nowrap;
+    }
+    .odds-row { display: flex; gap: 8px; }
+    .odds-pill {
+      flex: 1; text-align: center;
+      padding: 8px 4px;
+      background: var(--bg); border-radius: var(--radius);
+    }
+    .pill-label { font-size: 10px; color: var(--text-faint); margin-bottom: 3px; }
+    .pill-val { font-size: 13px; font-weight: 500; font-family: 'DM Mono', monospace; }
+    .pick-row {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .pick-tag {
+      font-size: 12px; font-weight: 500;
+      padding: 4px 12px; border-radius: 20px;
+    }
+    .tag-green { background: var(--green-light); color: var(--green); }
+    .tag-amber { background: var(--amber-light); color: var(--amber); }
+    .tag-gray { background: var(--bg); color: var(--text-muted); }
+    .pick-note { font-size: 12px; color: var(--text-faint); }
+
+    /* STATES */
+    .loading-state {
+      display: flex; align-items: center; gap: 12px;
+      padding: 40px 24px; color: var(--text-muted);
+      font-size: 14px; justify-content: center;
+    }
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid var(--border-strong);
+      border-top-color: var(--green-mid);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite; flex-shrink: 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .empty-state {
+      text-align: center; padding: 40px 24px;
+      color: var(--text-muted); font-size: 14px;
+    }
+    .error-state {
+      background: var(--red-light); color: var(--red);
+      border-radius: var(--radius); padding: 14px 18px;
+      font-size: 13px; margin: 8px 0; line-height: 1.5;
+    }
+
+    /* PRICING */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px; margin-top: 12px;
+    }
+    .price-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+    }
+    .price-card.featured { border: 2px solid var(--green-mid); }
+    .price-badge {
+      display: inline-block;
+      font-size: 11px; font-weight: 500;
+      background: var(--green-light); color: var(--green);
+      padding: 3px 10px; border-radius: 20px;
+      margin-bottom: 12px;
+    }
+    .price-name { font-size: 16px; font-weight: 500; margin-bottom: 6px; }
+    .price-amount { font-size: 30px; font-weight: 500; letter-spacing: -0.5px; }
+    .price-per { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+    .price-feature {
+      font-size: 13px; color: var(--text-muted);
+      padding: 4px 0; display: flex; align-items: center; gap: 8px;
+    }
+    .check { color: var(--green-mid); font-size: 15px; }
+    .price-btn {
+      width: 100%; padding: 10px; margin-top: 14px;
+      border-radius: var(--radius); font-size: 14px;
+      font-weight: 500; cursor: pointer; font-family: inherit;
+      border: 1px solid var(--border-strong);
+      background: var(--bg); color: var(--text);
+      transition: background 0.15s;
+    }
+    .price-btn:hover { background: #eee; }
+    .price-btn.green {
+      background: var(--green-mid); color: #fff; border: none;
+    }
+    .price-btn.green:hover { opacity: 0.88; }
+
+    /* FEATURES */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px; margin-top: 12px;
+    }
+    .feat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 16px;
+    }
+    .feat-icon { font-size: 22px; margin-bottom: 10px; }
+    .feat-title { font-size: 14px; font-weight: 500; margin-bottom: 5px; }
+    .feat-desc { font-size: 13px; color: var(--text-muted); line-height: 1.55; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 32px;
+      display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 12px;
+    }
+    .footer-logo { font-size: 15px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+    .footer-note { font-size: 12px; color: var(--text-faint); }
+
+    .divider { height: 1px; background: var(--border); margin: 36px 0; }
+    .last-update { font-size: 11px; color: var(--text-faint); text-align: right; margin-bottom: 16px; font-family: 'DM Mono', monospace; }
+
+    @media (max-width: 520px) {
+      nav { padding: 14px 16px; }
+      .nav-links .nav-link { display: none; }
+      .hero h1 { font-size: 30px; }
+      .container { padding: 0 16px 48px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo"><div class="logo-dot"></div>Oddsbetting</div>
+  <div class="nav-links">
+    <span class="nav-link" onclick="document.getElementById('picks').scrollIntoView({behavior:'smooth'})">Picks</span>
+    <span class="nav-link" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Features</span>
+    <span class="nav-link" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Pricing</span>
+    <button class="nav-cta" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Get started</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge"><div class="live-dot"></div>Live odds updated hourly</div>
+  <h1>Bet smarter with data, not gut feelings</h1>
+  <p>Live odds, historical trends, and AI picks across every major sport — all in one place.</p>
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="document.getElementById('picks').scrollIntoView({behavior:'smooth'})">See today's picks</button>
+    <button class="btn-secondary" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">How it works</button>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-val" id="game-count">—</div><div class="stat-label">Games loaded</div></div>
+    <div class="stat-card"><div class="stat-val" id="avg-total">—</div><div class="stat-label">Avg total</div></div>
+    <div class="stat-card"><div class="stat-val" id="api-calls">—</div><div class="stat-label">API calls left</div></div>
+    <div class="stat-card"><div class="stat-val">63%</div><div class="stat-label">ATS win rate</div></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div id="picks">
+    <div class="section-label">Live odds &amp; picks</div>
+    <div class="sport-nav" id="sport-nav">
+      <button class="sport-btn active" onclick="loadSport('americanfootball_nfl','NFL',this)">NFL</button>
+      <button class="sport-btn" onclick="loadSport('basketball_nba','NBA',this)">NBA</button>
+      <button class="sport-btn" onclick="loadSport('baseball_mlb','MLB',this)">MLB</button>
+      <button class="sport-btn" onclick="loadSport('icehockey_nhl','NHL',this)">NHL</button>
+    </div>
+    <div class="last-update" id="last-update"></div>
+    <div id="games-container">
+      <div class="loading-state"><div class="spinner"></div>Fetching live odds...</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div id="features">
+    <div class="section-label">Why Pickwise</div>
+    <div class="features-grid">
+      <div class="feat-card">
+        <div class="feat-icon">⚡</div>
+        <div class="feat-title">Hourly odds updates</div>
+        <div class="feat-desc">Live lines from every major sportsbook, refreshed automatically so you never miss a move.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📊</div>
+        <div class="feat-title">Historical trends</div>
+        <div class="feat-desc">Years of ATS data behind every pick so you bet with context, not just hope.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🤖</div>
+        <div class="feat-title">AI analysis</div>
+        <div class="feat-desc">Every game gets an AI breakdown of matchup edges, injuries, and historical angles.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🔔</div>
+        <div class="feat-title">Pick alerts</div>
+        <div class="feat-desc">Get notified the moment a high-confidence pick drops before the line moves.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div id="pricing">
+    <div class="section-label">Pricing</div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-name">Free</div>
+        <div class="price-amount">$0</div>
+        <div class="price-per">forever</div>
+        <div class="price-feature"><span class="check">✓</span>3 picks per day</div>
+        <div class="price-feature"><span class="check">✓</span>Basic odds view</div>
+        <div class="price-feature"><span class="check">✓</span>1 sport</div>
+        <button class="price-btn">Get started</button>
+      </div>
+      <div class="price-card featured">
+        <div class="price-badge">Most popular</div>
+        <div class="price-name">Pro</div>
+        <div class="price-amount">$19</div>
+        <div class="price-per">per month</div>
+        <div class="price-feature"><span class="check">✓</span>Unlimited picks</div>
+        <div class="price-feature"><span class="check">✓</span>All 4 sports</div>
+        <div class="price-feature"><span class="check">✓</span>AI analysis</div>
+        <div class="price-feature"><span class="check">✓</span>Pick alerts</div>
+        <button class="price-btn green">Start free trial</button>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Sharp</div>
+        <div class="price-amount">$49</div>
+        <div class="price-per">per month</div>
+        <div class="price-feature"><span class="check">✓</span>Everything in Pro</div>
+        <div class="price-feature"><span class="check">✓</span>Raw data export</div>
+        <div class="price-feature"><span class="check">✓</span>Parlay builder</div>
+        <div class="price-feature"><span class="check">✓</span>Priority support</div>
+        <button class="price-btn">Go sharp</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-logo"><div class="logo-dot"></div>Oddsbetting</div>
+  <div class="footer-note">For entertainment only. Please gamble responsibly. &copy; 2026 Oddsbetting</div>
+</footer>
+
+<script>
+  const API_SERVER = 'https://oddsbetting.onrender.com';
+
+  async function fetchWithProxy(url) {
+    const sport = url.match(/sports\/([^/]+)\/odds/)[1];
+    const res = await fetch(API_SERVER + '/odds/' + sport);
+    if (!res.ok) throw new Error('Server error ' + res.status);
+    const remaining = res.headers.get('x-requests-remaining');
+    if (remaining) document.getElementById('api-calls').textContent = remaining;
+    return await res.json();
+  }
+
+  function getPick(homeOdds, awayOdds, homeTeam, awayTeam) {
+    if (!homeOdds || !awayOdds) return { tag: 'No line', cls: 'tag-gray', note: 'Odds unavailable' };
+    const homeFav = homeOdds < awayOdds;
+    const diff = Math.abs(homeOdds - awayOdds);
+    const fav = homeFav ? homeTeam.split(' ').pop() : awayTeam.split(' ').pop();
+    if (diff > 150) return { tag: 'Take ' + fav, cls: 'tag-green', note: 'Strong favorite edge' };
+    if (diff > 60) return { tag: 'Lean ' + fav, cls: 'tag-amber', note: 'Moderate edge' };
+    return { tag: 'Toss-up', cls: 'tag-gray', note: 'Near even odds — pass or fade public' };
+  }
+
+  function fmt(n) { if (!n && n !== 0) return '—'; return n > 0 ? '+' + n : '' + n; }
+
+  function fmtTime(iso) {
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) +
+      ' &middot; ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  async function loadSport(sport, label, btn) {
+    document.querySelectorAll('.sport-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    document.getElementById('games-container').innerHTML = '<div class="loading-state"><div class="spinner"></div>Fetching live ' + label + ' odds...</div>';
+    document.getElementById('game-count').textContent = '—';
+    document.getElementById('avg-total').textContent = '—';
+
+    try {
+      const apiUrl = BASE + '/sports/' + sport + '/odds/?apiKey=' + API_KEY + '&regions=us&markets=h2h,spreads,totals&oddsFormat=american';
+      const games = await fetchWithProxy(apiUrl);
+      document.getElementById('last-update').textContent = 'Last updated: ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('game-count').textContent = games.length;
+
+      if (!games.length) {
+        document.getElementById('games-container').innerHTML = '<div class="empty-state">No upcoming ' + label + ' games right now. Check back when the season is active.</div>';
+        return;
+      }
+
+      let totals = [];
+      const html = games.slice(0, 12).map(function(game) {
+        const bookie = game.bookmakers && game.bookmakers[0];
+        let homeML = null, awayML = null, spread = null, total = null;
+
+        if (bookie) {
+          const h2h = bookie.markets.find(function(m) { return m.key === 'h2h'; });
+          const spreadMkt = bookie.markets.find(function(m) { return m.key === 'spreads'; });
+          const totalMkt = bookie.markets.find(function(m) { return m.key === 'totals'; });
+          if (h2h) {
+            const ho = h2h.outcomes.find(function(o) { return o.name === game.home_team; });
+            const ao = h2h.outcomes.find(function(o) { return o.name === game.away_team; });
+            homeML = ho ? ho.price : null;
+            awayML = ao ? ao.price : null;
+          }
+          if (spreadMkt) {
+            const ho = spreadMkt.outcomes.find(function(o) { return o.name === game.home_team; });
+            spread = ho ? (ho.point > 0 ? '+' + ho.point : '' + ho.point) : null;
+          }
+          if (totalMkt) {
+            const ov = totalMkt.outcomes.find(function(o) { return o.name === 'Over'; });
+            total = ov ? ov.point : null;
+            if (total) totals.push(total);
+          }
+        }
+
+        const pick = getPick(homeML, awayML, game.home_team, game.away_team);
+        return '<div class="game-card">' +
+          '<div class="game-top"><span class="game-time">' + fmtTime(game.commence_time) + '</span>' +
+          (bookie ? '<span class="game-book">' + bookie.title + '</span>' : '') + '</div>' +
+          '<div class="matchup">' +
+          '<div class="team-block"><div class="team-name">' + game.home_team + '</div><div class="team-ml">ML ' + fmt(homeML) + '</div></div>' +
+          '<div class="vs-badge">vs</div>' +
+          '<div class="team-block right"><div class="team-name">' + game.away_team + '</div><div class="team-ml">ML ' + fmt(awayML) + '</div></div>' +
+          '</div>' +
+          '<div class="odds-row">' +
+          '<div class="odds-pill"><div class="pill-label">Home ML</div><div class="pill-val">' + fmt(homeML) + '</div></div>' +
+          '<div class="odds-pill"><div class="pill-label">Spread</div><div class="pill-val">' + (spread || '—') + '</div></div>' +
+          '<div class="odds-pill"><div class="pill-label">Total</div><div class="pill-val">' + (total || '—') + '</div></div>' +
+          '<div class="odds-pill"><div class="pill-label">Away ML</div><div class="pill-val">' + fmt(awayML) + '</div></div>' +
+          '</div>' +
+          '<div class="pick-row"><span class="pick-tag ' + pick.cls + '">' + pick.tag + '</span><span class="pick-note">' + pick.note + '</span></div>' +
+          '</div>';
+      }).join('');
+
+      document.getElementById('games-container').innerHTML = html;
+      if (totals.length) {
+        const avg = totals.reduce(function(a, b) { return a + b; }, 0) / totals.length;
+        document.getElementById('avg-total').textContent = avg.toFixed(1);
+      }
+
+    } catch(e) {
+      document.getElementById('games-container').innerHTML = '<div class="error-state"><strong>Could not load live odds.</strong><br><br>This is a browser security issue (CORS). The permanent fix is a free mini-server — come back to Pickwise setup and I will get it working in 5 minutes.</div>';
+    }
+  }
+
+  loadSport('americanfootball_nfl', 'NFL', document.querySelector('.sport-btn.active'));
+</script>
+</body>
+</html>
